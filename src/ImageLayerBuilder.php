@@ -33,10 +33,6 @@ class ImageLayerBuilder
 
   /**
    * Set path for background dir, output dir, and temp dir.
-   *
-   * @param  string $bgDirPath
-   * @param  string $outputPath
-   * @param  string $tempPath
    */
   public function __construct(
     string $bgDirPath = '',
@@ -56,27 +52,19 @@ class ImageLayerBuilder
 
   /**
    * Make a new instance statically, with default constructor values
-   *
-   * @param  string $bgDirPath
-   * @param  string $outputPath
-   * @param  string $tempPath
-   * @return self
    */
   public static function make(
     string $bgDirPath = '',
     string $outputPath = '',
     string $tempPath = ''
-  ): self {
-    return new self($bgDirPath, $outputPath, $tempPath);
+  ): static {
+    return new static($bgDirPath, $outputPath, $tempPath);
   }
 
   /**
    * Set background directory path to find all the available backgrounds.
-   *
-   * @param  string $bgDirPath
-   * @return self
    */
-  public function setBgDirPath(string $bgDirPath): self
+  public function setBgDirPath(string $bgDirPath): static
   {
     $this->bgDirPath = $bgDirPath;
 
@@ -85,11 +73,8 @@ class ImageLayerBuilder
 
   /**
    * Set output directory path to store the output file.
-   *
-   * @param  string $outputPath
-   * @return self
    */
-  public function setOutputPath(string $outputPath): self
+  public function setOutputPath(string $outputPath): static
   {
     $this->outputPath = $outputPath;
 
@@ -99,11 +84,8 @@ class ImageLayerBuilder
   /**
    * Set temporary directory path to store temporary files.
    * This will be cleaned up after generation.
-   *
-   * @param  string $tempPath
-   * @return self
    */
-  public function setTempPath(string $tempPath): self
+  public function setTempPath(string $tempPath): static
   {
     $this->tempPath = $tempPath;
 
@@ -112,11 +94,8 @@ class ImageLayerBuilder
 
   /**
    * Set the background width to resize.
-   *
-   * @param  int $width
-   * @return self
    */
-  public function resizeBackgroundWidth(int $width): self
+  public function resizeBackgroundWidth(int $width): static
   {
     $this->bgWidth = $width;
 
@@ -125,11 +104,8 @@ class ImageLayerBuilder
 
   /**
    * Set the background heght to resize.
-   *
-   * @param  int $height
-   * @return self
    */
-  public function resizeBackgroundHeight(int $height): self
+  public function resizeBackgroundHeight(int $height): static
   {
     $this->bgHeight = $height;
 
@@ -138,8 +114,6 @@ class ImageLayerBuilder
 
   /**
    * return all available background file names in the background types directory
-   *
-   * @return array
    */
   public function getBackgrounds(): array
   {
@@ -163,11 +137,8 @@ class ImageLayerBuilder
 
   /**
    * Set the background. This has to be an image that exists in the bigDirPath dir
-   *
-   * @param  string $background
-   * @return self
    */
-  public function setBackground(string $background): self
+  public function setBackground(string $background): static
   {
     $this->backgroundName = $background;
 
@@ -176,11 +147,8 @@ class ImageLayerBuilder
 
   /**
    * Set custom font path
-   *
-   * @param  string $fontPath
-   * @return self
    */
-  public function setCustomFont(string $fontPath): self
+  public function setCustomFont(string $fontPath): static
   {
     $this->fontPath = $fontPath;
 
@@ -202,16 +170,6 @@ class ImageLayerBuilder
    * object - Intervention\Image\Image instance
    * object - SplFileInfo instance (To handle Laravel file uploads via Symfony\Component\HttpFoundation\File\UploadedFile)
    * The border is an array of [width, color]
-   *
-   * @param  mixed $image
-   * @param  int $widthResize
-   * @param  int $heightResize
-   * @param  bool $rounded
-   * @param  string $position
-   * @param  int $posX
-   * @param  int $posY
-   * @param  array|null $border
-   * @return self
    */
   public function addImage(
     mixed $image,
@@ -222,7 +180,7 @@ class ImageLayerBuilder
     int $posX = 0,
     int $posY = 0,
     ?array $border = null
-  ): self {
+  ): static {
 
     $this->images[] = $image;
 
@@ -243,15 +201,6 @@ class ImageLayerBuilder
   /**
    * Add given text with the options to the background image.
    * This method can be called more than once.
-   *
-   * @param  string $text
-   * @param  string $position
-   * @param  integer $offsetX
-   * @param  integer $offsetY
-   * @param  integer $fontSize
-   * @param  string $color
-   * @param  integer $angle
-   * @return self
    */
   public function addText(
     string $text,
@@ -261,7 +210,7 @@ class ImageLayerBuilder
     int $fontSize = 32,
     string $color = '#fdf6e3',
     int $angle = 0
-  ): self {
+  ): static {
 
     $this->backgroundTexts[] = [
       'text' => $text,
@@ -278,10 +227,8 @@ class ImageLayerBuilder
 
   /**
    * Generate background image
-   *
-   * @return self
    */
-  public function generate(): self
+  public function generate(): static
   {
     $this->saveImagesTemporarily();
     $this->generateBackground();
@@ -293,9 +240,6 @@ class ImageLayerBuilder
 
   /**
    * Exports the generated background image to a file with given format
-   *
-   * @param  string $filename
-   * @return string
    */
   public function saveToFile(?string $filename = ''): string
   {
@@ -308,8 +252,6 @@ class ImageLayerBuilder
 
   /**
    * Return the background image stream content.
-   *
-   * @return \GdImage
    */
   public function getOutputStream(): \GdImage
   {
@@ -321,8 +263,6 @@ class ImageLayerBuilder
 
   /**
    * Return the background image stream content.
-   *
-   * @return string
    */
   public function getRawStream(): string
   {
@@ -333,8 +273,6 @@ class ImageLayerBuilder
 
   /**
    * Store the image temporarily in a file to be inserted onto the background image instance
-   *
-   * @return void
    */
   protected function saveImagesTemporarily()
   {
@@ -373,8 +311,6 @@ class ImageLayerBuilder
 
   /**
    * Create a new Intervention Image instance for the given background type.
-   *
-   * @return void
    */
   protected function generateBackground()
   {
@@ -398,8 +334,6 @@ class ImageLayerBuilder
 
   /**
    * Calls after background instance is created to insert all the texts onto the background instance.
-   *
-   * @return void
    */
   protected function applyBackgroundTexts()
   {
@@ -429,9 +363,6 @@ class ImageLayerBuilder
 
   /**
    * Set given image source to a rounded image
-   *
-   * @param  InterventionImage $src
-   * @return InterventionImage
    */
   protected function setImageRounded(InterventionImage $src): InterventionImage
   {
@@ -452,9 +383,6 @@ class ImageLayerBuilder
 
   /**
    * Set given image source to a rounded image
-   *
-   * @param  InterventionImage $src
-   * @return InterventionImage
    */
   protected function setImageBorder(InterventionImage $src, int $width, string $color): InterventionImage
   {
@@ -479,8 +407,6 @@ class ImageLayerBuilder
 
   /**
    * Sets the centered X and Y position of the selected background.
-   *
-   * @return void
    */
   protected function getBackgroundCenteredDimensions()
   {
@@ -490,8 +416,6 @@ class ImageLayerBuilder
 
   /**
    * Performs cleanup after generation
-   *
-   * @return void
    */
   protected function cleanup()
   {
@@ -502,9 +426,6 @@ class ImageLayerBuilder
 
   /**
    * Get the background path for given background
-   *
-   * @return string
-   * @throws \Exception
    */
   protected function getBackgroundPath(): string
   {
@@ -518,8 +439,6 @@ class ImageLayerBuilder
 
   /**
    * Generates a random 15 character for a file name, with the output format
-   *
-   * @return string
    */
   protected function generateFileName(): string
   {
